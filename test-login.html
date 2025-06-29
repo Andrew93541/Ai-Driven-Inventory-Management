@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login - AI Inventory System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .demo-accounts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .account-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+        .account-card.admin {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        .account-card.staff {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+        .account-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .account-details {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        .role-badge.admin {
+            background: #dc3545;
+        }
+        .role-badge.staff {
+            background: #007bff;
+        }
+        .login-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Login - AI Inventory System</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <ol>
+                <li>Start the backend server: <code>cd server && npm start</code></li>
+                <li>Open the main application: <a href="client/index.html" target="_blank">client/index.html</a></li>
+                <li>Use any of the demo accounts below to test different roles and departments</li>
+            </ol>
+        </div>
+
+        <div class="demo-accounts">
+            <div class="account-card admin">
+                <div class="account-title">
+                    <span class="role-badge admin">ADMIN</span> Full Access
+                </div>
+                <div class="account-details">
+                    <strong>Email:</strong> admin@college.edu<br>
+                    <strong>Password:</strong> admin123<br>
+                    <strong>Department:</strong> admin<br>
+                    <strong>Access:</strong> All departments, all features
+                </div>
+            </div>
+
+            <div class="account-card staff">
+                <div class="account-title">
+                    <span class="role-badge staff">STAFF</span> Laboratory
+                </div>
+                <div class="account-details">
+                    <strong>Email:</strong> staff@college.edu<br>
+                    <strong>Password:</strong> staff123<br>
+                    <strong>Department:</strong> lab<br>
+                    <strong>Access:</strong> Lab items only, create/update
+                </div>
+            </div>
+
+            <div class="account-card staff">
+                <div class="account-title">
+                    <span class="role-badge staff">STAFF</span> Library
+                </div>
+                <div class="account-details">
+                    <strong>Email:</strong> library@college.edu<br>
+                    <strong>Password:</strong> library123<br>
+                    <strong>Department:</strong> library<br>
+                    <strong>Access:</strong> Library items only, create/update
+                </div>
+            </div>
+
+            <div class="account-card staff">
+                <div class="account-title">
+                    <span class="role-badge staff">STAFF</span> Sports
+                </div>
+                <div class="account-details">
+                    <strong>Email:</strong> sports@college.edu<br>
+                    <strong>Password:</strong> sports123<br>
+                    <strong>Department:</strong> sports<br>
+                    <strong>Access:</strong> Sports items only, create/update
+                </div>
+            </div>
+
+            <div class="account-card staff">
+                <div class="account-title">
+                    <span class="role-badge staff">STAFF</span> Hostel
+                </div>
+                <div class="account-details">
+                    <strong>Email:</strong> hostel@college.edu<br>
+                    <strong>Password:</strong> hostel123<br>
+                    <strong>Department:</strong> hostel<br>
+                    <strong>Access:</strong> Hostel items only, create/update
+                </div>
+            </div>
+
+            <div class="account-card staff">
+                <div class="account-title">
+                    <span class="role-badge staff">STAFF</span> General
+                </div>
+                <div class="account-details">
+                    <strong>Email:</strong> general@college.edu<br>
+                    <strong>Password:</strong> general123<br>
+                    <strong>Department:</strong> general<br>
+                    <strong>Access:</strong> General items only, create/update
+                </div>
+            </div>
+        </div>
+
+        <div class="login-form">
+            <h3>🔐 Quick Login Test</h3>
+            <form id="quickLoginForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Enter email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div class="note">
+            <h3>💡 Testing Tips:</h3>
+            <ul>
+                <li><strong>Admin:</strong> Can see all departments, delete items, approve requests</li>
+                <li><strong>Staff:</strong> Can only see their department, create/update items, create requests</li>
+                <li><strong>Department Filtering:</strong> Each staff member only sees their department's data</li>
+                <li><strong>Role-based UI:</strong> Different features are shown/hidden based on role</li>
+                <li><strong>Request Approval:</strong> Only admins can approve/decline requests</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <h3>🔧 Quick Test:</h3>
+            <p>Test the login API directly below:</p>
+            <div class="login-form">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="testEmail" value="staff@college.edu">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="testPassword" value="staff123">
+                </div>
+                <button onclick="testLogin()">Test Login API</button>
+                <div id="testResult" style="margin-top: 10px; padding: 10px; border-radius: 4px;"></div>
+            </div>
+            
+            <h4 style="margin-top: 20px;">Test Registration:</h4>
+            <div class="login-form">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="testRegName" value="Test User">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="testRegEmail" value="test@college.edu">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="testRegPassword" value="test123">
+                </div>
+                <div class="form-group">
+                    <label>Department:</label>
+                    <select id="testRegDepartment">
+                        <option value="lab">Laboratory</option>
+                        <option value="library">Library</option>
+                        <option value="sports">Sports</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Role:</label>
+                    <select id="testRegRole">
+                        <option value="staff">Staff</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button onclick="testRegister()">Test Register API</button>
+                <div id="testRegResult" style="margin-top: 10px; padding: 10px; border-radius: 4px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('quickLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Store credentials in localStorage for the main app
+            localStorage.setItem('testEmail', email);
+            localStorage.setItem('testPassword', password);
+            
+            // Redirect to main login page
+            window.open('client/index.html', '_blank');
+        });
+
+        // Auto-fill demo accounts on click
+        document.querySelectorAll('.account-details').forEach(card => {
+            card.addEventListener('click', function() {
+                const email = this.querySelector('strong:contains("Email:")').nextSibling.textContent.trim();
+                const password = this.querySelector('strong:contains("Password:")').nextSibling.textContent.trim();
+                
+                document.getElementById('email').value = email;
+                document.getElementById('password').value = password;
+            });
+        });
+
+        async function testLogin() {
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            const resultDiv = document.getElementById('testResult');
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.style.background = '#d4edda';
+                    resultDiv.style.color = '#155724';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Login Successful!</strong><br>
+                        User: ${data.user.name}<br>
+                        Role: ${data.user.role}<br>
+                        Department: ${data.user.department}<br>
+                        Token: ${data.token.substring(0, 20)}...
+                    `;
+                } else {
+                    resultDiv.style.background = '#f8d7da';
+                    resultDiv.style.color = '#721c24';
+                    resultDiv.innerHTML = `<strong>❌ Login Failed:</strong> ${data.message}`;
+                }
+            } catch (error) {
+                resultDiv.style.background = '#f8d7da';
+                resultDiv.style.color = '#721c24';
+                resultDiv.innerHTML = `<strong>❌ Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function testRegister() {
+            const name = document.getElementById('testRegName').value;
+            const email = document.getElementById('testRegEmail').value;
+            const password = document.getElementById('testRegPassword').value;
+            const department = document.getElementById('testRegDepartment').value;
+            const role = document.getElementById('testRegRole').value;
+            const resultDiv = document.getElementById('testRegResult');
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password, department, role })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.style.background = '#d4edda';
+                    resultDiv.style.color = '#155724';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Registration Successful!</strong><br>
+                        User: ${data.user.name}<br>
+                        Email: ${data.user.email}<br>
+                        Role: ${data.user.role}<br>
+                        Department: ${data.user.department}<br>
+                        Token: ${data.token.substring(0, 20)}...
+                    `;
+                } else {
+                    resultDiv.style.background = '#f8d7da';
+                    resultDiv.style.color = '#721c24';
+                    resultDiv.innerHTML = `<strong>❌ Registration Failed:</strong> ${data.message}`;
+                }
+            } catch (error) {
+                resultDiv.style.background = '#f8d7da';
+                resultDiv.style.color = '#721c24';
+                resultDiv.innerHTML = `<strong>❌ Error:</strong> ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html> 

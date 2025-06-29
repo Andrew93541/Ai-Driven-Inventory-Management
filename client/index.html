@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Inventory Management System - Login</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1><i class="fas fa-robot"></i> AI Inventory</h1>
+                <p>AI-Powered Inventory Management System</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="loginTab">Login</button>
+                <button class="tab-btn" id="registerTab">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="auth-form active" id="loginContent">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="password-field">
+                            <input type="password" id="loginPassword" name="password" required>
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('loginPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </button>
+                </form>
+                
+                <div class="demo-accounts">
+                    <h4>Demo Accounts:</h4>
+                    <div class="demo-account" onclick="fillLoginForm('admin@college.edu', 'admin123')">
+                        <strong>Admin:</strong> admin@college.edu / admin123
+                    </div>
+                    <div class="demo-account" onclick="fillLoginForm('staff@college.edu', 'staff123')">
+                        <strong>Lab Staff:</strong> staff@college.edu / staff123
+                    </div>
+                    <div class="demo-account" onclick="fillLoginForm('library@college.edu', 'library123')">
+                        <strong>Library:</strong> library@college.edu / library123
+                    </div>
+                    <div class="demo-account" onclick="fillLoginForm('sports@college.edu', 'sports123')">
+                        <strong>Sports:</strong> sports@college.edu / sports123
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Register Form -->
+            <div class="auth-form" id="registerContent">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail">Email Address</label>
+                        <input type="email" id="registerEmail" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <div class="password-field">
+                            <input type="password" id="registerPassword" name="password" required>
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('registerPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirm Password</label>
+                        <div class="password-field">
+                            <input type="password" id="registerConfirmPassword" name="confirmPassword" required>
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('registerConfirmPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerDepartment">Department</label>
+                        <select id="registerDepartment" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="lab">Laboratory</option>
+                            <option value="library">Library</option>
+                            <option value="sports">Sports</option>
+                            <option value="hostel">Hostel</option>
+                            <option value="admin">Administration</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerRole">Role</label>
+                        <select id="registerRole" name="role" required>
+                            <option value="">Select Role</option>
+                            <option value="staff">Staff</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i>
+                        Register
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+</body>
+</html> 

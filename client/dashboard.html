@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Inventory Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-robot"></i> AI Inventory</h2>
+                <p id="departmentDescription" class="dept-description">Inventory Management System</p>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item active">
+                    <a href="#" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" data-page="inventory">
+                        <i class="fas fa-boxes"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" data-page="requests">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span class="nav-text">Requests</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" data-page="forecast">
+                        <i class="fas fa-chart-line"></i>
+                        <span class="nav-text">AI Forecast</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" data-page="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                </div>
+                <!-- Admin-only navigation items -->
+                <div class="nav-item admin-only" style="display: none;">
+                    <a href="#" data-page="users">
+                        <i class="fas fa-users"></i>
+                        <span class="nav-text">User Management</span>
+                    </a>
+                </div>
+                <div class="nav-item admin-only" style="display: none;">
+                    <a href="#" data-page="settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">System Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Loading...</div>
+                        <div class="user-role" id="userRole">Loading...</div>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="page-content active" id="dashboardContent">
+                <!-- Overview Cards -->
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <span class="card-title">Total Items</span>
+                            <div class="card-icon blue">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="totalItems">0</div>
+                        <div class="card-change">+5% from last month</div>
+                    </div>
+                    
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <span class="card-title">Low Stock Alerts</span>
+                            <div class="card-icon orange">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="lowStockAlerts">0</div>
+                        <div class="card-change negative">+2 from yesterday</div>
+                    </div>
+                    
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <span class="card-title">Pending Requests</span>
+                            <div class="card-icon red">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="pendingRequests">0</div>
+                        <div class="card-change">-3 from yesterday</div>
+                    </div>
+                    
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <span class="card-title">Monthly Usage</span>
+                            <div class="card-icon green">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="monthlyUsage">0</div>
+                        <div class="card-change">+12% from last month</div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Monthly Usage Trend</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="monthlyUsageChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Department Distribution</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="departmentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Content -->
+            <div class="page-content" id="inventoryContent">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Inventory Management</h3>
+                        <div class="table-actions">
+                            <input type="text" id="searchInput" placeholder="Search items..." class="form-control">
+                            <select id="categoryFilter" class="form-control">
+                                <option value="">All Categories</option>
+                            </select>
+                            <select id="departmentFilter" class="form-control admin-only" style="display: none;">
+                                <option value="">All Departments</option>
+                            </select>
+                            <select id="stockFilter" class="form-control">
+                                <option value="">All Stock Levels</option>
+                                <option value="in_stock">In Stock</option>
+                                <option value="low_stock">Low Stock</option>
+                                <option value="out_of_stock">Out of Stock</option>
+                            </select>
+                            <button class="btn btn-primary" id="addItemBtn">
+                                <i class="fas fa-plus"></i> Add Item
+                            </button>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th class="admin-only" style="display: none;">Department</th>
+                                <th>Stock Level</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Requests Content -->
+            <div class="page-content" id="requestsContent">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Request Management</h3>
+                        <div class="table-actions">
+                            <input type="text" id="requestSearchInput" placeholder="Search requests..." class="form-control">
+                            <select id="requestStatusFilter" class="form-control">
+                                <option value="">All Statuses</option>
+                            </select>
+                            <select id="requestDepartmentFilter" class="form-control admin-only" style="display: none;">
+                                <option value="">All Departments</option>
+                            </select>
+                            <button class="btn btn-primary" id="createRequestBtn">
+                                <i class="fas fa-plus"></i> Create Request
+                            </button>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Reason</th>
+                                <th class="admin-only" style="display: none;">Requested By</th>
+                                <th class="admin-only" style="display: none;">Department</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requestsTableBody">
+                            <tr>
+                                <td colspan="8" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Forecast Content -->
+            <div class="page-content" id="forecastContent">
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <span class="card-title">Critical Risk</span>
+                            <div class="card-icon red">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="criticalRiskCount">0</div>
+                        <div class="card-change">Items at risk</div>
+                    </div>
+                    
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <span class="card-title">High Risk</span>
+                            <div class="card-icon orange">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="highRiskCount">0</div>
+                        <div class="card-change">Items at risk</div>
+                    </div>
+                    
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <span class="card-title">Medium Risk</span>
+                            <div class="card-icon blue">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="mediumRiskCount">0</div>
+                        <div class="card-change">Items at risk</div>
+                    </div>
+                    
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <span class="card-title">Low Risk</span>
+                            <div class="card-icon green">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="lowRiskCount">0</div>
+                        <div class="card-change">Items at risk</div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>AI Forecast</h3>
+                        <div class="table-actions">
+                            <select id="forecastPeriodSelect" class="form-control">
+                                <option value="7">7 Days</option>
+                                <option value="14">14 Days</option>
+                                <option value="30" selected>30 Days</option>
+                                <option value="60">60 Days</option>
+                            </select>
+                            <button class="btn btn-outline" id="forecastRefreshBtn">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <button class="btn btn-primary" onclick="exportForecastReport()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Current Stock</th>
+                                <th>Predicted Usage</th>
+                                <th>Risk Level</th>
+                                <th>Days Until Stockout</th>
+                                <th>Confidence</th>
+                                <th>Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forecastTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Usage Trend Forecast</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="usageTrendChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Risk Distribution</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="riskDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Content -->
+            <div class="page-content" id="reportsContent">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Reports & Analytics</h3>
+                        <div class="table-actions">
+                            <select id="reportTypeSelect" class="form-control">
+                                <option value="dashboard">Dashboard Overview</option>
+                                <option value="monthly-usage">Monthly Usage</option>
+                                <option value="department-distribution">Department Distribution</option>
+                                <option value="category-distribution">Category Distribution</option>
+                                <option value="request-status">Request Status</option>
+                                <option value="inventory-status">Inventory Status</option>
+                            </select>
+                            <select id="reportPeriodSelect" class="form-control">
+                                <option value="3">3 Months</option>
+                                <option value="6" selected>6 Months</option>
+                                <option value="12">12 Months</option>
+                            </select>
+                            <button class="btn btn-primary" id="generateReportBtn">
+                                <i class="fas fa-chart-bar"></i> Generate
+                            </button>
+                            <button class="btn btn-outline" id="exportReportBtn">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                    <div id="reportContent">
+                        <div class="text-center">
+                            <p>Select a report type and click "Generate" to view analytics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Add Item Modal -->
+    <div class="modal" id="addItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Item</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="addItemForm" onsubmit="handleAddItem(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemName">Item Name *</label>
+                        <input type="text" id="itemName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemCategory">Category *</label>
+                        <select id="itemCategory" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="office_supplies">Office Supplies</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="furniture">Furniture</option>
+                            <option value="medical_supplies">Medical Supplies</option>
+                            <option value="laboratory_equipment">Laboratory Equipment</option>
+                            <option value="textbooks">Textbooks</option>
+                            <option value="sports_equipment">Sports Equipment</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Description</label>
+                    <textarea id="itemDescription" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemDepartment">Department *</label>
+                        <select id="itemDepartment" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="computer_science">Computer Science</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="biology">Biology</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="business">Business</option>
+                            <option value="arts">Arts</option>
+                            <option value="administration">Administration</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemQuantity">Quantity *</label>
+                        <input type="number" id="itemQuantity" name="quantity" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemUnit">Unit *</label>
+                        <select id="itemUnit" name="unit" required>
+                            <option value="">Select Unit</option>
+                            <option value="pieces">Pieces</option>
+                            <option value="boxes">Boxes</option>
+                            <option value="sets">Sets</option>
+                            <option value="pairs">Pairs</option>
+                            <option value="units">Units</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemMinStock">Minimum Stock Level *</label>
+                        <input type="number" id="itemMinStock" name="minStockLevel" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemLocation">Location</label>
+                        <input type="text" id="itemLocation" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemSupplier">Supplier</label>
+                        <input type="text" id="itemSupplier" name="supplier">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="itemCost">Cost per Unit</label>
+                    <input type="number" id="itemCost" name="cost" min="0" step="0.01">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal(document.getElementById('addItemModal'))">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Item Modal -->
+    <div class="modal" id="editItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Item</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="editItemForm" onsubmit="handleEditItem(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editItemName">Item Name *</label>
+                        <input type="text" id="editItemName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editItemCategory">Category *</label>
+                        <select id="editItemCategory" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="office_supplies">Office Supplies</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="furniture">Furniture</option>
+                            <option value="medical_supplies">Medical Supplies</option>
+                            <option value="laboratory_equipment">Laboratory Equipment</option>
+                            <option value="textbooks">Textbooks</option>
+                            <option value="sports_equipment">Sports Equipment</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editItemDescription">Description</label>
+                    <textarea id="editItemDescription" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editItemDepartment">Department *</label>
+                        <select id="editItemDepartment" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="computer_science">Computer Science</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="biology">Biology</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="business">Business</option>
+                            <option value="arts">Arts</option>
+                            <option value="administration">Administration</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editItemQuantity">Quantity *</label>
+                        <input type="number" id="editItemQuantity" name="quantity" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editItemUnit">Unit *</label>
+                        <select id="editItemUnit" name="unit" required>
+                            <option value="">Select Unit</option>
+                            <option value="pieces">Pieces</option>
+                            <option value="boxes">Boxes</option>
+                            <option value="sets">Sets</option>
+                            <option value="pairs">Pairs</option>
+                            <option value="units">Units</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editItemMinStock">Minimum Stock Level *</label>
+                        <input type="number" id="editItemMinStock" name="minStockLevel" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editItemLocation">Location</label>
+                        <input type="text" id="editItemLocation" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label for="editItemSupplier">Supplier</label>
+                        <input type="text" id="editItemSupplier" name="supplier">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editItemCost">Cost per Unit</label>
+                    <input type="number" id="editItemCost" name="cost" min="0" step="0.01">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal(document.getElementById('editItemModal'))">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Item Modal -->
+    <div class="modal" id="deleteItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Item</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="deleteItemName"></strong>?</p>
+                <p>This action cannot be undone.</p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-outline" onclick="closeModal(document.getElementById('deleteItemModal'))">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="handleDeleteItem()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Request Modal -->
+    <div class="modal" id="newRequestModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">New Request</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="newRequestForm" onsubmit="handleNewRequest(event)">
+                <div class="form-group">
+                    <label for="requestItemId">Item *</label>
+                    <select id="requestItemId" name="itemId" required>
+                        <option value="">Select an item</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="requestQuantity">Quantity *</label>
+                        <input type="number" id="requestQuantity" name="quantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="requestPriority">Priority</label>
+                        <select id="requestPriority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="normal" selected>Normal</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="requestReason">Reason *</label>
+                    <textarea id="requestReason" name="reason" rows="3" required placeholder="Please provide a reason for this request..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal(document.getElementById('newRequestModal'))">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Request Details Modal -->
+    <div class="modal" id="requestDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Request Details</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="request-details">
+                    <div class="detail-row">
+                        <strong>Item:</strong> <span id="requestItemName"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Requested By:</strong> <span id="requestUserName"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Department:</strong> <span id="requestUserDepartment"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Quantity:</strong> <span id="requestQuantity"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Reason:</strong> <span id="requestReason"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Priority:</strong> <span id="requestPriority"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Status:</strong> <span id="requestStatus"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Requested Date:</strong> <span id="requestDate"></span>
+                    </div>
+                    <div id="approvalInfo" style="display: none;">
+                        <!-- Approval/decline info will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/dashboard.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/requests.js"></script>
+    <script src="js/forecast.js"></script>
+    <script src="js/reports.js"></script>
+</body>
+</html> 
