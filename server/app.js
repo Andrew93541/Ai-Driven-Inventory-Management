@@ -83,20 +83,20 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/forecast', forecastRoutes);
 app.use('/api/reports', reportRoutes);
 
-// 404 handler for API routes only
-app.use('/api/*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'API endpoint not found'
-  });
-});
-
 // Serve static files from client directory
 app.use(express.static(path.join(__dirname, '../client')));
 
 // For any non-API route, serve index.html (for SPA routing)
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
+});
+
+// 404 handler for API routes only
+app.use('/api/*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'API endpoint not found'
+  });
 });
 
 // Global error handler
