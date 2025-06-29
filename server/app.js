@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
 const config = require('./config');
+const path = require('path');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -82,12 +83,20 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/forecast', forecastRoutes);
 app.use('/api/reports', reportRoutes);
 
-// 404 handler
-app.use('*', (req, res) => {
+// 404 handler for API routes only
+app.use('/api/*', (req, res) => {
   res.status(404).json({
     success: false,
     message: 'API endpoint not found'
   });
+});
+
+// Serve static files from client directory
+app.use(express.static(path.join(__dirname, '../client')));
+
+// For any non-API route, serve index.html (for SPA routing)
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 // Global error handler
